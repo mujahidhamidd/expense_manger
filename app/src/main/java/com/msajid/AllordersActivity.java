@@ -1,6 +1,8 @@
 package com.msajid;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 
 public class AllordersActivity extends AppCompatActivity {
@@ -110,8 +113,49 @@ public class AllordersActivity extends AppCompatActivity {
         });
 
 
+
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                           int pos, final long id) {
+                // TODO Auto-generated method stub
+
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                if(delete(String.valueOf(id)))
+                                    Toast.makeText(AllordersActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
+                                Intent intent = getIntent();
+                                finish();
+                                startActivity(intent);
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                break;
+                        }
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(AllordersActivity.this);
+                builder.setMessage("Are you sure you want to delete this?").setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).show();
+
+                return true;
+            }
+        });
+
+
+
     }
 
+
+    public boolean delete(String id)
+    {
+        return db.delete("orders", "_id" + "=" + id, null) > 0;
+    }
 
 
     private  void callphone(){
