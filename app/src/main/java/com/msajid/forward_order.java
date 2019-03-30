@@ -1,10 +1,17 @@
 package com.msajid;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -87,6 +94,8 @@ public class forward_order extends AppCompatActivity {
                 db.insert("orders", null, cv);
 
 
+                makeNotification(masjid_name,"new order");
+
                 Toast.makeText(forward_order.this, "Added ", Toast.LENGTH_SHORT).show();
 
 
@@ -95,6 +104,22 @@ public class forward_order extends AppCompatActivity {
         });
     }
 
+
+    public  void makeNotification(String title,String content) {
+
+
+
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder( getApplicationContext())
+                        .setSmallIcon(R.drawable.ic_action_alarms)
+                        .setContentTitle(title)
+                        .setContentText(content).setSound(Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
+                        + "://" +  getApplicationContext().getPackageName() + "/raw/notify"));
+
+        // Add as notification
+        NotificationManager manager = (NotificationManager)  getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.notify(0, builder.build());
+    }
     @Override
     public void onBackPressed() {
         Intent setIntent = new Intent(this, MainActivity.class);

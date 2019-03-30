@@ -17,7 +17,7 @@
         <activity
             android:name="com.msajid.add_masjid"
 
-            android:label="@string/title_activity_create_note">
+            android:label="@string/title_activity_create_masjid">
 
 
         </activity>
@@ -47,6 +47,7 @@
 
 
         </activity>
+
     </application>
 
 </manifest>
