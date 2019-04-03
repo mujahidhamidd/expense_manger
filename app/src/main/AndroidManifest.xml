@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.msajid">
+    package="com.expense">
 
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
@@ -10,31 +10,33 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.msajid.MainActivity"
+            android:name="com.expense.MainActivity"
             android:label="@string/app_name">
 
         </activity>
         <activity
-            android:name="com.msajid.add_masjid"
+            android:name="com.expense.add_money"
+            android:parentActivityName=".MainActivity"
 
-            android:label="@string/title_activity_create_masjid">
+            android:label="Add Money">
 
 
         </activity>
 
 
         <activity
-            android:name="com.msajid.AllordersActivity"
-            android:parentActivityName=".MainActivity"
-            android:label="All ORDERS">
+            android:name="com.expense.Statistics"
+            android:parentActivityName="com.expense.MainActivity"
+            android:label="Statistics">
             -
 
         </activity>
         <activity
-            android:name="com.msajid.forward_order"
+            android:name="com.expense.edit"
+            android:parentActivityName=".MainActivity"
             android:label="@string/title_activity_information" />
 
-        <activity android:name="com.msajid.login" >
+        <activity android:name="com.expense.login" >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,7 +44,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.msajid.register" >
+        <activity android:name="com.expense.register" >
 
 
 

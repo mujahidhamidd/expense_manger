@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/grey" >
+
+
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:weightSum="3"
+       android:background="#ffffff"
+       android:layout_marginTop="30dp"
+       android:layout_marginBottom="10dp"
+       android:layout_height="wrap_content">
+
+
+      <Spinner
+          android:id="@+id/history_spinner"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="2"
+          android:buttonTint="#fff"
+          android:padding="25dp"
+          android:layout_marginLeft="8dip"
+          android:layout_marginRight="8dip"
+
+
+          />
+
+
+      <Button
+          android:id="@+id/buttongo"
+          android:layout_width="40dp"
+          android:layout_height="wrap_content"
+          android:text="go"
+          android:layout_weight="1"
+          android:letterSpacing="0.0025"
+          android:textColor="#fff"
+          android:textSize="16dp"
+          android:gravity="center"
+          android:padding="15dp"
+          android:background="@color/colorPrimary"
+          android:layout_alignParentBottom="true"/>
+
+
+
+
+
+   </LinearLayout>
+
+
+
+   <LinearLayout
+
+       android:orientation="vertical"
+
+       android:padding="20dp"
+
+       android:background="#fff"
+
+       android:layout_margin="5dp"
+       android:visibility="gone"
+
+       android:id="@+id/stat"
+
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content">
+
+
+
+      <TextView
+
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textAppearance="?android:attr/textAppearanceLarge"
+          android:text="Income :"
+          android:id="@+id/income"
+
+          android:textColor="@color/cardview_dark_background"
+
+
+          android:layout_marginRight="15dp"
+
+
+
+
+          android:layout_alignParentLeft="true"
+          android:layout_alignParentStart="true" />
+
+
+
+
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textAppearance="?android:attr/textAppearanceLarge"
+          android:text="Spending :"
+          android:id="@+id/spent"
+
+          android:textColor="@color/cardview_dark_background"
+
+
+          android:layout_marginRight="15dp"
+
+
+
+
+          android:layout_alignParentLeft="true"
+          android:layout_alignParentStart="true" />
+
+
+
+
+   </LinearLayout>
+
+
+   <ListView
+       android:padding="10dp"
+       android:layout_marginTop="10dp"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:id="@+id/commentlist">
+
+   </ListView>
+
+
+
+
+
+</LinearLayout>

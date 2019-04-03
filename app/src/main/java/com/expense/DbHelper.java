@@ -1,4 +1,4 @@
-package com.msajid;
+package com.expense;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -11,34 +11,24 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
 
-    public static final String DATABASE_NAME = "msajid";
+    public static final String DATABASE_NAME = "budget";
 
 
 
     // msajid table
 
-    public static final String MASJID_TABLE_NAME = "masjid";
+    public static final String EXPENSE_TABLE_NAME = "expense";
     public static final String ID = "_id";
-    public static final String NANE = "name";
+    public static final String TITLE = "title";
+    public static final String TYPE = "type";
 
-    public static final String PHONE1 = "phone1";
-    public static final String PHONE2 = "phone2";
-
-
-
-    public static final int VERSION = 12;
+    public static final String PRICE = "price";
+    public static final String DATE = "date";
 
 
-    //orders table
 
+    public static final int VERSION = 1;
 
-    private static final String TABLE_ORDERS = "orders";
-
-    // orders Table Columns names
-    private static final String COLUMN_ORDER_ID = "_id";
-    private static final String COLUMN__QUANTITY = "quantity";
-    private static final String COLUMN_MESSAGE = "message";
-    private static final String COLUMN_MASJID_NAME = "masjid_name";
 
 
     //users table
@@ -64,23 +54,11 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
     // create notes sql query
-    private final String CREATE_MASAJID = "create table  " + MASJID_TABLE_NAME + " ( "
+    private final String CREATE_EXPENSE = "create table  " + EXPENSE_TABLE_NAME + " ( "
     + ID + " integer primary key autoincrement, "
-    + NANE + " text, "
-    + PHONE1 + " text, "
-
-    + PHONE2 + " text)";
-
-
-
-
-    // create masjid sql query
-    private final String CREATE__ORDERS_TABLE = "create table  " + TABLE_ORDERS + " ( "
-            + COLUMN_ORDER_ID + " integer primary key autoincrement, "
-            + COLUMN__QUANTITY + " text, "
-            + COLUMN_MESSAGE + " text, "
-
-            + COLUMN_MASJID_NAME + " text)";
+    + TITLE + " text, "
+    + PRICE + " text, " + TYPE + " text, "
+    + DATE + " text)";
 
 
 
@@ -95,9 +73,9 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
 
-            db.execSQL(CREATE_MASAJID);
+            db.execSQL(CREATE_EXPENSE);
 
-            db.execSQL(CREATE__ORDERS_TABLE);
+
 
             db.execSQL(CREATE_USER_TABLE);
     }
@@ -192,7 +170,7 @@ public class DbHelper extends SQLiteOpenHelper {
         int cursorCount = cursor.getCount();
 
         cursor.close();
-        db.close();
+
         if (cursorCount > 0) {
             return true;
         }

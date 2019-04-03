@@ -1,4 +1,4 @@
-package com.msajid;
+package com.expense;
 
 import org.junit.Test;
 

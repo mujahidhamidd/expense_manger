@@ -43,9 +43,9 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/quantity"
+                        android:id="@+id/title"
                         android:maxLength="25"
-                        android:hint="Quantity"
+                        android:hint="Title"
                         android:layout_below="@+id/btnBack"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
@@ -57,8 +57,8 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/message"
-                        android:hint="Optional Message"
+                        android:id="@+id/amount"
+                        android:hint="Amount"
                         android:singleLine="false"
 
 
@@ -68,10 +68,10 @@
 
 
                     <Button
-                        android:id="@+id/forward"
+                        android:id="@+id/update"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Forward Order"
+                        android:text="Update"
                         android:letterSpacing="0.0025"
                         android:textColor="#fff"
                         android:textSize="16dp"

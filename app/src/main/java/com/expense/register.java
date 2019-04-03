@@ -1,6 +1,5 @@
-package com.msajid;
+package com.expense;
 
-import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,27 +8,29 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class login extends AppCompatActivity implements View.OnClickListener {
+public class register extends AppCompatActivity implements View.OnClickListener {
 
     private EditText editTextEmail, editTextPassword, editTextName, editTextSchool;
-
     SQLiteDatabase db;
     DbHelper mDbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
-        editTextEmail = findViewById(R.id.editTextEmail);
-        editTextPassword = findViewById(R.id.editTextPassword);
-
-
-
-        findViewById(R.id.buttonLogin).setOnClickListener(this);
-
+        setContentView(R.layout.activity_register);
 
         mDbHelper = new DbHelper(this);
         db = mDbHelper.getWritableDatabase();
+
+        editTextEmail = findViewById(R.id.editTextEmail);
+        editTextPassword = findViewById(R.id.editTextPassword);
+        editTextName = findViewById(R.id.editTextName);
+
+
+        findViewById(R.id.buttonSignUp).setOnClickListener(this);
+
+
+
     }
 
 
@@ -37,17 +38,12 @@ public class login extends AppCompatActivity implements View.OnClickListener {
     protected void onStart() {
         super.onStart();
 
-        if (SharedPrefManager.getInstance(this).isLoggedIn()) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-        }
     }
 
-
-    private void signin() {
+    private void userSignUp() {
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
+        String name = editTextName.getText().toString().trim();
 
 
         if (email.isEmpty()) {
@@ -74,31 +70,30 @@ public class login extends AppCompatActivity implements View.OnClickListener {
             return;
         }
 
+        if (name.isEmpty()) {
+            editTextName.setError("Name required");
+            editTextName.requestFocus();
+            return;
+        }
 
+        if (!mDbHelper.checkUser(editTextEmail.getText().toString().trim())) {
 
-        if (mDbHelper.Userlogin(editTextEmail.getText().toString().trim()
-                , editTextPassword.getText().toString().trim())) {
+            String Name=(editTextName.getText().toString().trim());
+            String Email=(editTextEmail.getText().toString().trim());
+            String Password=(editTextPassword.getText().toString().trim());
 
-//
-            Intent accountsIntent = new Intent(login.this, MainActivity.class);
-            startActivity(accountsIntent);
+            mDbHelper.addUser(Name,Email,Password);
 
-
-            SharedPrefManager.getInstance(login.this)
-                    .savelogin(email);
-
-
+            // Snack Bar to show success amount that record saved successfully
             Toast.makeText(this, "success", Toast.LENGTH_SHORT).show();
 
-
-
         } else {
-            // Snack Bar to show success message that record is wrong
-
-            Toast.makeText(this, "failed", Toast.LENGTH_SHORT).show();
+            // Snack Bar to show error amount that record already exists
+            Toast.makeText(this, "fialed", Toast.LENGTH_SHORT).show();
 
 
         }
+
 
 
 
@@ -107,18 +102,10 @@ public class login extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.buttonLogin:
-                signin();
+            case R.id.buttonSignUp:
+                userSignUp();
                 break;
 
-
         }
-    }
-
-    public void openreg(View view) {
-
-
-        Intent Intent = new Intent(login.this, register.class);
-        startActivity(Intent);
     }
 }

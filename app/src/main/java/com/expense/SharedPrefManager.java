@@ -1,4 +1,4 @@
-package com.msajid;
+package com.expense;
 
 import android.content.Context;
 import android.content.SharedPreferences;

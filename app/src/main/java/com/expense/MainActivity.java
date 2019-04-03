@@ -1,18 +1,13 @@
-package com.msajid;
+package com.expense;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,7 +18,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 
-public class AllordersActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     SQLiteDatabase db;
     DbHelper mDbHelper;
@@ -32,93 +27,48 @@ public class AllordersActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_allorders);
-        getSupportActionBar().setTitle("All Orders");
+        setContentView(R.layout.activity_main);
+        getSupportActionBar().setTitle("Expenses Manger");
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.blue)));
+
         list = (ListView)findViewById(R.id.commentlist);
+        floatingActionButton=(FloatingActionButton)findViewById(R.id.fab);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent openCreateNote = new Intent(MainActivity.this, add_money.class);
+                startActivity(openCreateNote);
+            }
+        });
+
 
         mDbHelper = new DbHelper(this);
         db= mDbHelper.getWritableDatabase();
 
-        String[] from = {"_id","quantity","message"  ,"masjid_name"};
-        final String[] column = {"_id", "quantity", "message", "masjid_name"};
-        int[] to = {R.id.id, R.id.quantity, R.id.message,R.id.masjid_name};
+        String[] from = {mDbHelper.TITLE, mDbHelper.PRICE,  mDbHelper.DATE, mDbHelper.TYPE};
+        final String[] column = {mDbHelper.ID, mDbHelper.TITLE, mDbHelper.DATE,  mDbHelper.PRICE,mDbHelper.TYPE};
+        int[] to = {R.id.title, R.id.date,R.id.price,R.id.type};
 
-        final Cursor cursor = db.query("orders", column, null, null ,null, null, null);
-        final SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.order_list, cursor, from, to, 0);
-
+        final Cursor cursor = db.query(mDbHelper.EXPENSE_TABLE_NAME, column, null, null ,null, null, null);
+        final SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.list_entry, cursor, from, to, 0);
 
         list.setAdapter(adapter);
-
         list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             public void onItemClick(AdapterView<?> listView, View view, int position,
-                                    long id){
-
-
-
-
-
-                // get phone from  masjid table
-
-
-                    Cursor cursor = db.rawQuery("select * from orders where _id =" + id, null);
-
-
-                    String masjid_name="";
-
-                    String masjid_phone="";
-                    if (cursor != null) {
-                        if (cursor.moveToFirst()) {
-
-
-                            masjid_name= cursor.getString(cursor.getColumnIndex("masjid_name"));
-
-
-
-                        }
-                        cursor.close();
-
-
-                        Cursor cursor2 = db.rawQuery("select * from masjid where name ='"+masjid_name+"'", null);
-
-
-
-                        if (cursor2 != null) {
-                            if (cursor2.moveToFirst()) {
-
-
-            masjid_phone=cursor2.getString(cursor2.getColumnIndex("phone1"));
-
-            callphone();
-
-
-                            }
-
-                            cursor2.close();
-                        }
-
-
-
-
-
-                }
-
-
+            long id){
+                Intent intent = new Intent(MainActivity.this, edit.class);
+                intent.putExtra(getString(R.string.rodId), id);
+                startActivity(intent);
             }
 
-
-
-
-
         });
-
 
 
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, final long id) {
-                // TODO Auto-generated method stub
+
 
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     @Override
@@ -126,7 +76,7 @@ public class AllordersActivity extends AppCompatActivity {
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
                                 if(delete(String.valueOf(id)))
-                                    Toast.makeText(AllordersActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MainActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
                                 Intent intent = getIntent();
                                 finish();
                                 startActivity(intent);
@@ -139,7 +89,7 @@ public class AllordersActivity extends AppCompatActivity {
                     }
                 };
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(AllordersActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setMessage("Are you sure you want to delete this?").setPositiveButton("Yes", dialogClickListener)
                         .setNegativeButton("No", dialogClickListener).show();
 
@@ -147,51 +97,39 @@ public class AllordersActivity extends AppCompatActivity {
             }
         });
 
-
-
     }
 
 
     public boolean delete(String id)
     {
-        return db.delete("orders", "_id" + "=" + id, null) > 0;
+        return db.delete("expense", "_id" + "=" + id, null) > 0;
     }
-
-
-    private  void callphone(){
-
-        if (ContextCompat.checkSelfPermission(AllordersActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(AllordersActivity.this, new String[]{Manifest.permission.CALL_PHONE},99);
-        }
-        else
-        {
-
-
-
-            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" +"7878"));// Initiates the Intent
-            startActivity(intent);
-        }
-
-
-    }
-
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
     }
 
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch(item.getItemId()) {
 
-
-
-            case R.id.action_settings:
+            case R.id.logout:
                 logout();
                return true;
+
+            case R.id.action_statistics:
+                Intent openallorders = new Intent(MainActivity.this, Statistics.class);
+                startActivity(openallorders);
+
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -199,8 +137,8 @@ public class AllordersActivity extends AppCompatActivity {
     }
 
     private void logout() {
-        SharedPrefManager.getInstance(AllordersActivity.this).clear();
-        Intent intent = new Intent(AllordersActivity.this, login.class);
+        SharedPrefManager.getInstance(MainActivity.this).clear();
+        Intent intent = new Intent(MainActivity.this, login.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
